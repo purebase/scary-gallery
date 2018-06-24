@@ -6,7 +6,10 @@
 to make best use of available space, and rearranges the images, when the
 size changes.
 
-Sample usage:
+## Install
+bower install
+
+## Sample usage:
 <!---
 ```
 <custom-element-demo>
