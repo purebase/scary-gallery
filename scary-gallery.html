@@ -91,6 +91,15 @@ Work in progress, the algorithm to layout the images is far from perfect.
                     this._children = Array.prototype.slice.call(
                         Polymer.dom(this).querySelectorAll('scary-image')
                     );
+
+                    // TODO - save parent reference inside every child:
+                    /*
+                    this._children.forEach(function (img) {
+                        let scaryImage  = img;
+                        console.log("scaryImage -> " + scaryImage);
+                    }
+                    */
+
                     this._resize();
                 }, 50);
             }
