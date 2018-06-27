@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="scary-gallery.html">
 
 <!--
 `scary-image` is an element to be used in `scary-gallery`
@@ -59,7 +60,9 @@ Basically identical to the `<img src="...">` tag:
         <a id="baseURIAnchor" href="#"></a>
         <div id="sizedImgDiv" role="img"
              aria-hidden$="[[_computeImgDivARIAHidden(alt)]]"
-             aria-label$="[[_computeImgDivARIALabel(alt, src)]]"></div>
+             aria-label$="[[_computeImgDivARIALabel(alt, src)]]"
+             on-click="_imgOnClick"
+        ></div>
         <img id="img" on-load="_imgOnLoad" on-error="_imgOnError">
     </template>
 
@@ -162,8 +165,20 @@ Basically identical to the `<img src="...">` tag:
                         type: Number,
                         notify: true,
                         computed: '_computeNaturalHeight(loaded)'
+                    },
+
+                    _scaryGallery: {
+//                        type: ScaryGallery,
+                        value: null
                     }
                 }
+            }
+
+            set scaryGallery(ref) {
+                this._scaryGallery = ref;
+            }
+            get scaryGallery() {
+                return this._scaryGallery;
             }
 
             static get observers() {
@@ -175,6 +190,11 @@ Basically identical to the `<img src="...">` tag:
 
             created() {
                 this._resolvedSrc = '';
+            }
+
+            _imgOnClick() {
+                console.log("_imgOnClick() scaryGallery: " + this.scaryGallery);
+                this.scaryGallery._childOnClick(this);
             }
 
             _imgOnLoad() {
@@ -232,7 +252,7 @@ Basically identical to the `<img src="...">` tag:
                 // NOTE: Use of `URL` was removed here because IE11 doesn't support
                 // constructing it. If this ends up being problematic, we should
                 // consider reverting and adding the URL polyfill as a dev dependency.
-                var resolved = this._resolveSrc(this.src);
+                let resolved = this._resolveSrc(this.src);
                 // Remove query parts, get file name.
                 return resolved.replace(/[?|#].*/g, '').split('/').pop();
             }
@@ -246,7 +266,7 @@ Basically identical to the `<img src="...">` tag:
             }
 
             _loadStateObserver(src) {
-                var newResolvedSrc = this._resolveSrc(src);
+                let newResolvedSrc = this._resolveSrc(src);
                 if (newResolvedSrc === this._resolvedSrc) {
                     return;
                 }
@@ -270,7 +290,7 @@ Basically identical to the `<img src="...">` tag:
             }
 
             _resolveSrc(testSrc) {
-                var resolved = Polymer.ResolveUrl.resolveUrl(testSrc, this.$.baseURIAnchor.href);
+                let resolved = Polymer.ResolveUrl.resolveUrl(testSrc, this.$.baseURIAnchor.href);
                 // NOTE: Use of `URL` was removed here because IE11 doesn't support
                 // constructing it. If this ends up being problematic, we should
                 // consider reverting and adding the URL polyfill as a dev dependency.

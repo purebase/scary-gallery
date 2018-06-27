@@ -74,6 +74,10 @@ Work in progress, the algorithm to layout the images is far from perfect.
                 ]
             }
 
+            _childOnClick(scaryImage) {
+                console.log("_childOnClick() scaryImage: " + scaryImage);
+            }
+
             attached() {
                 this._observer = Polymer.dom(this).observeNodes(this._init);
                 this._boundResize = this._resize.bind(this);
@@ -86,6 +90,7 @@ Work in progress, the algorithm to layout the images is far from perfect.
             }
 
             _init() {
+                let self = this;
                 this.debounce('init', function () {
                     this._firstResize = true;
                     this._children = Array.prototype.slice.call(
@@ -93,28 +98,30 @@ Work in progress, the algorithm to layout the images is far from perfect.
                     );
 
                     // TODO - save parent reference inside every child:
-                    /*
+
                     this._children.forEach(function (img) {
                         let scaryImage  = img;
                         console.log("scaryImage -> " + scaryImage);
-                    }
-                    */
+                        scaryImage.scaryGallery = self;
+                    });
+
 
                     this._resize();
                 }, 50);
             }
 
             _resize() {
+                let self = this;
                 this.debounce('resize', function () {
-                    var loaded = true;
-                    var rows = [];
-                    var row = [];
-                    var rowWidth = 0;
+                    let loaded = true;
+                    let rows = [];
+                    let row = [];
+                    let rowWidth = 0;
                     this._maxWidth = this.offsetWidth;
                     this._children.forEach(function (img) {
                         img.style.margin = (this.gap / 2).toString(10) + 'px';
                         if (img.loaded) {
-                            var width = this.minHeight / img.naturalHeight * img.naturalWidth + this.gap;
+                            let width = this.minHeight / img.naturalHeight * img.naturalWidth + this.gap;
                             if (rowWidth + width > this._maxWidth) {
                                 if (row.length > 0) {
                                     rows.push({
@@ -140,10 +147,10 @@ Work in progress, the algorithm to layout the images is far from perfect.
                     }
 
                     rows.forEach(function (row) {
-                        var totalGap = row.images.length * this.gap;
-                        var targetWidth = this._maxWidth - totalGap;
-                        var rowWidth = row.width - totalGap;
-                        var targetHeight = this.minHeight * targetWidth / rowWidth;
+                        let totalGap = row.images.length * this.gap;
+                        let targetWidth = this._maxWidth - totalGap;
+                        let rowWidth = row.width - totalGap;
+                        let targetHeight = this.minHeight * targetWidth / rowWidth;
 
                         row.images.forEach(function (img) {
                             img.height = targetHeight;
